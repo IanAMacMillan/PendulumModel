@@ -12,7 +12,7 @@ def step(state, dt=0.05, add_noise=False):
 
     x, x_dot, theta, theta_dot, phi, phi_dot = state
 
-    #u = np.clip(u, -self.max_torque, self.max_torque)[0]
+    #u = np.clip(u, -self.max_torque, self.max_torque)[0] #used to exclude unexceptable values for input
 
     g = 9.81 #m/s
     
@@ -42,6 +42,7 @@ def step(state, dt=0.05, add_noise=False):
     return output_state
     
 def report(state, filename, print_data=False):
+    #Function to append our data to a txt file. Eventually this will be where LIGO realtime interface goes
     x, x_dot, theta, theta_dot, phi, phi_dot = state
     save_string=str(x)+'\t'+str(x_dot)+'\t'+str(theta)+'\t'+str(theta_dot)+'\t'+str(phi)+'\t'+str(phi_dot)+'\n'
     
@@ -53,6 +54,7 @@ def report(state, filename, print_data=False):
         the_file.write(towrite)
             
 def getfilename():
+    #gets a new file name for each run
     pathtofolder='ModelData'
     entries = os.listdir(pathtofolder)
     highestrun=0
@@ -63,11 +65,11 @@ def getfilename():
     filepath=pathtofolder+"/Run_"+str(highestrun)+".txt"
     return filepath
         
-def reset(state):
-    #if state==None:
-    #    state=np.array([0,0,0,0,0,0])
-    return state
-    
+def reset(state=None):
+    if state is None:
+        return np.array([0,0,0,0,0,0])
+    else:
+        return state
 
 
 #To test these functions
@@ -77,8 +79,8 @@ x_data=[]
 t_data=[]
 
 filename=getfilename()
-print(filename)
-state=reset(np.array([0,0,0,0,0.5,0]))
+print('data saved to:', str(filename))
+state=reset(np.array([0.05,0,0,0,0,0]))
 report(state, filename, print_data=False)
 for i in range(1000):
     state=step(state)
@@ -93,3 +95,4 @@ plt.plot(t_data, x_data)
 plt.ylabel('x value (m)')
 plt.xlabel('Time (s)')
 plt.show()
+
