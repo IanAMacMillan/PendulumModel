@@ -71,7 +71,7 @@ def reset(state=None):
     else:
         return state
 
-
+'''
 #To test these functions
 #input_state=[ul,ur,ll,lr]
 
@@ -95,4 +95,4 @@ plt.plot(t_data, x_data)
 plt.ylabel('x value (m)')
 plt.xlabel('Time (s)')
 plt.show()
-
+'''
